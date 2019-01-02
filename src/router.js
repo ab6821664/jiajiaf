@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/home/index'
+import detail from './views/home/detail'
+import process from './views/home/detailPart/process'
+import advantage from './views/home/detailPart/advantage'
+import pictures from './views/home/detailPart/pictures'
 
 Vue.use(Router)
 
@@ -11,6 +15,25 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+       path:'/detail',
+       name:'detail',
+       component:detail,
+        children:[
+            {
+              path:"process",
+                component:process
+            },
+            {
+                path:"advantage",
+                component:advantage
+            },
+            {
+                path:"pictures",
+                component:pictures
+            }
+        ]
     },
     {
       path: '/about',

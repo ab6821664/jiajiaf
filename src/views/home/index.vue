@@ -35,10 +35,9 @@
                  </el-option>
              </el-select>
          </div>
-         <div class="list-show" v-for="item in items">
-             <div> <img src="../../assets/image_logo/hsrj.jpg" class="list-logo"/> {{item.name}}</div>
-             <div> <i class="el-icon-sold-out" style="color:#ff7835"></i> {{item.spends}}</div>
-             <div> <i class="el-icon-news" style="color:#ff7835"></i> {{item.potential}}</div>
+         <div class="list-show" v-for="(item,index) in items" :key="index" @click="target(item.symbol,item.name)">
+             <div> <img :src="item.pic" class="list-logo"/> {{item.name}}</div>
+             <div> <i class="el-icon-message" style="color:#ff7835"></i> {{item.description}}</div>
              <div>
                  评分:<span style="color: rgb(247,186,42)">{{item.score}}</span>
              </div>
@@ -50,6 +49,7 @@
     import axios from 'axios'
     import ClipboardJS from 'clipboard'
     import headTitle from '../../components/head-title'
+    import { homeList } from '../../api/api'
     export default {
         data:function(){
             return {
@@ -69,24 +69,31 @@
                 ],
                 sortKindsValue:"",
                 items:[
-                    {kind:'shopping',name:'花生日记飞',logo:"../../assets/image_logo/hsrj.jpg",spends:"零投入",potential:"收入高",score:4.8,id:"hsrj"},
-                    {kind:'shopping',name:'花生日记',logo:"../../assets/image_logo/hsrj.jpg",spends:"零投入",potential:"收入高",score:4.8,id:"hsrj"},
-                    {kind:'shopping',name:'花生日记的',logo:"../../assets/image_logo/hsrj.jpg",spends:"零投入",potential:"收入高",score:4.8,id:"hsrj"},
-                    {kind:'shopping',name:'花生日记他',logo:"../../assets/image_logo/hsrj.jpg",spends:"零投入",potential:"收入高",score:4.8,id:"hsrj"},
-                    {kind:'shopping',name:'花生日记',logo:"../../assets/image_logo/hsrj.jpg",spends:"零投入",potential:"收入高",score:4.8,id:"hsrj"},
-                    {kind:'shopping',name:'花生日记',logo:"../../assets/image_logo/hsrj.jpg",spends:"零投入",potential:"收入高",score:4.8,id:"hsrj"},
+                   // {"id":1,"symbol":"hsrj","name":"花生日记","description":"淘宝天猫优惠券平台","score":4.8},
                 ]
             }
         },
         name: "index",
         mounted(){
+            var this_=this;
             new ClipboardJS('.btn');
+            homeList().then(function (res) {
+                console.log(res);
+                res.data.map(function (item) {
+                    item.pic=require('../../assets/image_logo/'+item.pic);
+                })
+                this_.items=res.data;
+            })
+        },
+        methods:{
+            target(id,name){
+                this.$router.push({name:'detail',params:{id:id,name:name}});
+            }
         },
         components:{
             headTitle
         },
         created(){
-            return;
             var todayId=sessionStorage.getItem('id');
             if(!todayId) {
                 var today = new Date();
