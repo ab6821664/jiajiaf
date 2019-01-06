@@ -10,8 +10,8 @@
                      家家发平台，旨在为大家推荐，分享利用闲余时间可以挣钱的方法！
                  </p>
                  <div class="banner-choose">
-                     <el-button type="info" plain><i class="el-icon-document"></i> 了解本平台</el-button>
-                     <el-button type="primary" plain><i class="el-icon-message"></i> 网挣杂谈</el-button>
+                     <el-button type="info" plain @click="toAbout"><i class="el-icon-document"></i> 了解本平台</el-button>
+                     <el-button type="primary" plain  @click="toSetting"><i class="el-icon-setting"></i> 我的推广</el-button>
                  </div>
              </div>
          </div>
@@ -35,7 +35,10 @@
                  </el-option>
              </el-select>
          </div>
-         <div class="list-show" v-for="(item,index) in items" :key="index" @click="target(item.symbol,item.name)">
+        <div id="home-load-tip" v-show="!loadSccess">
+            <div>加载中<i class="el-icon-loading"></i></div>
+        </div>
+         <div class="list-show" v-for="(item,index) in items" :key="index" @click="target(item.symbol,item.name,item.invite)">
              <div> <img :src="item.pic" class="list-logo"/> {{item.name}}</div>
              <div> <i class="el-icon-message" style="color:#ff7835"></i> {{item.description}}</div>
              <div>
@@ -46,10 +49,8 @@
 </template>
 
 <script>
-    import axios from 'axios'
-    import ClipboardJS from 'clipboard'
     import headTitle from '../../components/head-title'
-    import { homeList } from '../../api/api'
+    import { homeList,visitAdd } from '../../api/api'
     export default {
         data:function(){
             return {
@@ -70,24 +71,37 @@
                 sortKindsValue:"",
                 items:[
                    // {"id":1,"symbol":"hsrj","name":"花生日记","description":"淘宝天猫优惠券平台","score":4.8},
-                ]
+                ],
+                loadSccess:false
             }
         },
         name: "index",
         mounted(){
             var this_=this;
-            new ClipboardJS('.btn');
             homeList().then(function (res) {
-                console.log(res);
+
                 res.data.map(function (item) {
                     item.pic=require('../../assets/image_logo/'+item.pic);
                 })
-                this_.items=res.data;
+                // 判断是否有替换
+                this_.items=res.data.map(function (item) {
+                    item.invite=localStorage.getItem(item.symbol)?localStorage.getItem(item.symbol):item.invite;
+                    return item;
+                })
+                this_.loadSccess=true;
             })
         },
         methods:{
-            target(id,name){
-                this.$router.push({name:'detail',params:{id:id,name:name}});
+            target(id,name,code){
+                //this.$router.push({name:'detail',params:{symbol:id,name:name,code:code}})
+                this.$router.push({path:`/detail/${id}/${name}/${code}`});
+
+            },
+            toSetting:function () {
+                this.$router.push({path:"/set"})
+            },
+            toAbout:function () {
+                this.$router.push({path:"/about"})
             }
         },
         components:{
@@ -96,15 +110,7 @@
         created(){
             var todayId=sessionStorage.getItem('id');
             if(!todayId) {
-                var today = new Date();
-                var month = (today.getMonth() + 1) > 9 ? (today.getMonth() + 1) : "0" + (today.getMonth() + 1);
-                var day = today.getDate() > 9 ? today.getDate() : "0" + today.getDate();
-                todayId = today.getFullYear() + "" + month + day;
-                var url = "http://localhost:9090/home/add/" + todayId;
-                axios.get(url).then(function () {
-
-                })
-                sessionStorage.setItem('id',todayId);
+                visitAdd();
             }
         }
     }
@@ -158,6 +164,15 @@
     .list-logo{
         width:2rem;
         vertical-align: middle;
+    }
+    #home-load-tip{
+        position: absolute;
+        height:80%;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>
 

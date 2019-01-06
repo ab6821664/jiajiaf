@@ -5,6 +5,8 @@ import detail from './views/home/detail'
 import process from './views/home/detailPart/process'
 import advantage from './views/home/detailPart/advantage'
 import pictures from './views/home/detailPart/pictures'
+import setting from './views/setting/index'
+import intro from './views/setting/intro'
 
 Vue.use(Router)
 
@@ -17,12 +19,13 @@ export default new Router({
       component: Home
     },
     {
-       path:'/detail',
+       path:'/detail/:symbol/:name/:code',
        name:'detail',
        component:detail,
         children:[
             {
-              path:"process",
+                path: '',
+                name:process,
                 component:process
             },
             {
@@ -35,13 +38,14 @@ export default new Router({
             }
         ]
     },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
+
+      {
+          path:'/set',
+          component:setting
+      },
+      {
+          path:'/about',
+          component:intro
+      }
   ]
 })

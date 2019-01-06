@@ -1,13 +1,16 @@
 <template>
     <div>
-        <head-title :title="title"></head-title>
+        <head-title :title="title" backShow=true></head-title>
         <div id="menu">
-        <router-link to="/detail/process">流程</router-link>
-        <router-link to="/detail/advantage">优缺点</router-link>
-        <router-link to="/detail/pictures"> 相关图片</router-link>
-        </div>
+        <router-link :to="`/detail/${symbol}/${title}/${code}`">流程</router-link>
+        <router-link :to="`/detail/${symbol}/${title}/${code}/pictures`"> 介绍</router-link>
+        <router-link :to="`/detail/${symbol}/${title}/${code}/advantage`">收益图片</router-link>
 
+        </div>
+        <keep-alive>
         <router-view></router-view>
+        </keep-alive>
+        <foot-invite :code="code" v-if="code!='null'"></foot-invite>
     </div>
 
 
@@ -15,19 +18,22 @@
 
 <script>
     import headTitle from '../../components/head-title'
+    import footInvite from '../../components/foot-invite'
     export default {
         name: "detail",
         data(){
             return {
-                title:''
+                title:'',
+                code:"",
+                symbol:""
             }
         },
         created(){
             this.title=this.$route.params.name;
-            if(this.title)this.$router.push('detail/process');
-            else {this.$router.push('process')}
+            this.code=this.$route.params.code;
+            this.symbol=this.$route.params.symbol;
         },
-        components:{headTitle}
+        components:{headTitle,footInvite}
     }
 </script>
 
