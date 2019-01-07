@@ -11,7 +11,6 @@ import intro from './views/setting/intro'
 Vue.use(Router)
 
 export default new Router({
-    mode: "history",
   routes: [
     {
       path: '/',

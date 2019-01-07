@@ -1,6 +1,6 @@
 import axios from 'axios';
 // let base='http://134.160.170.177:9090';
-let  base='http://192.168.16.101:9090';
+let  base='http://39.108.225.85:9090';
 
 
  const homeList=()=>{

@@ -12,8 +12,8 @@
                 <a :href="item.picture.split('_')[0]">安卓版下载</a>
                 <a :href="item.picture.split('_')[1]">苹果IOS版下载</a>
             </div>
-                  <div>
-
+                  <div class="step-img" v-if="index>0&&item.picture">
+                           <img :src="item.picture">
                   </div>
               </div>
         </div>
@@ -32,7 +32,12 @@
         created:function () {
             var this_=this;
             getItemProcess(this.$route.params.symbol).then(function (res) {
-                this_.process=res.data;
+                this_.process=res.data.map(function (item) {
+                    if(item.id>1&&item.picture){
+                        item.picture=require('../../../assets/image_detail/'+ item.picture);
+                    }
+                    return item;
+                })
             })
         },
         watch:{
@@ -51,9 +56,9 @@
         padding: 0 .5rem;
     }
     .steps-detail{
-        font-size:.75rem;
+        font-size:.7rem;
         text-indent: 18px;
-        line-height: 1.2rem;
+        line-height: 2rem;
         padding: .1rem 0;
     }
     .steps-title{
@@ -78,5 +83,8 @@
         display: inline-block;
         text-align: center;
     }
+     .step-img{
+         width:80%;
+     }
 
 </style>

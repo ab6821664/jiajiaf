@@ -29,7 +29,7 @@
                     newObject.pic=img;
                     return newObject;
                 })
-                console.log(this_.img);
+
             })
         },
         created:function () {
@@ -41,9 +41,10 @@
 <style scoped>
     p{
         text-align: left;
-        font-size: .85rem;
+        font-size: .7rem;
         text-indent: 1rem;
         margin: .5rem .5rem;
+        line-height: 1.5rem;
     }
    img{
        width:85%;

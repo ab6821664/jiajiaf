@@ -31,9 +31,9 @@
         margin:.5rem 0;
     }
     .steps-detail{
-        font-size:.75rem;
+        font-size:.7rem;
         text-indent: 18px;
-        line-height: 1.2rem;
+        line-height: 1.5rem;
         text-align: left;
         padding: .1rem .5rem;
     }
