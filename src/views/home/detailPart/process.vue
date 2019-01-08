@@ -83,8 +83,11 @@
         display: inline-block;
         text-align: center;
     }
-     .step-img{
+     .step-img img{
          width:80%;
      }
+   .step-img{
+       text-align: center;
+   }
 
 </style>
